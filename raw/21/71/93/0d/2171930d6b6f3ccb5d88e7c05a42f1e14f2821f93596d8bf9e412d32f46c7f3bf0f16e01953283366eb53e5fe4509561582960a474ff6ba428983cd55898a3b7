@@ -1,0 +1,1 @@
+geth --identity "mydev1" --rpc --rpccorsdomain "*" --datadir "C:\Mychains\dev1" --rpcapi "db,eth,net,web3" --network 100 init "./CustomGenesis.json"
