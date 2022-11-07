@@ -1,0 +1,135 @@
+/* file : selection.c
+ * purpose: Proportional selection
+ *
+ */
+
+#include <stdlib.h>
+#include <time.h>
+#include <stdio.h>
+
+void
+selectio(Population,Fit,p_size,len,inde,fit_sf)
+int	**Population;		/* pointer to the whole population */
+double	*Fit;			/* pointer to the fitness vector */
+int 	p_size;		/* size of population */
+int 	len;		/* length of each individual */
+int	inde;		/* inde for the best */
+int 	fit_sf;	/* shift fitness, 1:yes; 0: no */
+{
+	int i,j,k;
+	double *Prob;	/* probability vector of individuals to be selected */
+	double Sum;
+	double SumProb;
+	double prob;
+	int *flag;		/* information for selected times */
+	int no;
+	double	mini,remain;
+	
+	extern double minimial(double *,int);
+
+	Prob=(double *)calloc(p_size,sizeof(double));
+	flag=(int *)calloc(p_size,sizeof(int));
+
+	/* shift the fitness */
+	/* find the minimial fitness */
+	if (fit_sf==1)
+	{
+		mini=minimial(Fit,p_size);
+		if (mini<0.1)
+			remain=mini;
+		else
+			remain=0.1;
+
+		for (i=0;i<p_size;i++)
+			Fit[i]=Fit[i]-mini+remain;
+	}
+	/* calculation the sum of the fitness */
+	Sum=0.0;
+	for (i=0;i<p_size;i++)
+	{
+		Sum+=Fit[i];
+	}
+
+	/* calculate the probability vector of individuals */
+	SumProb=0.0;
+	for (i=0;i<p_size;i++)
+	{
+		Prob[i]=Fit[i]/Sum+SumProb;
+		SumProb+=Fit[i]/Sum;
+	}
+
+	/* generate new population */
+
+	/* set all flags to be zero, means no one has been selected */
+	for (i=0;i<p_size;i++)
+	{
+		flag[i]=0;
+	}
+
+	flag[inde]=1;  /* keep the best */
+
+	randomize();
+
+	/* set the flags for all individuals */
+	for (i=0;i<(p_size-1);i++)
+	{
+		/* turn wheel to see which individual is selected */
+		prob=(1.0*random(1000))/1000;
+		k=0;
+		for (j=0;j<p_size;j++)
+		{
+			if (prob>=Prob[j])
+				k=j+1;
+		}
+		flag[k]+=1;
+	}
+
+
+	/* form the new population */
+	for (i=0;i<p_size;i++)
+	{
+		if (flag[i]==0)
+		{
+			no=0;
+			for (j=0;j<p_size;j++)
+			{
+				if (flag[j]>1)
+				{
+					k=j;
+					no=no+1;
+					break;
+				}
+			}
+			if (no==0)
+			{
+				printf("something wrong in selection \n");
+				exit(1);
+			}
+			flag[k]=flag[k]-1;
+
+
+			/* copy the selected individual to new individual */
+			for (j=0;j<len;j++)
+				Population[i][j]=Population[k][j];
+
+			/* get the fitness for the new individual */
+			flag[i]+=1;
+		}
+	}
+
+	/* check the selection */
+	for (i=0;i<p_size;i++)
+	{
+		if (flag[i]!=1)
+		{
+			printf("something wrong with selection \n");
+			exit(1);
+		}
+	}
+	free(Prob);
+	free(flag);
+}
+
+
+
+
