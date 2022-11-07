@@ -1,0 +1,12 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Draft//EN">
+<HTML>
+<HEAD>
+<TITLE>web发布程序</TITLE>
+</HEAD>
+<BODY >
+<H1>web发布程序</H1>
+Text that is going to be displayed before the image of the VI Panel.<P>
+<IMG src="/.monitor?web%B7%A2%B2%BC%B3%CC%D0%F2.vi" alt="web发布程序" BORDER=1><P>
+Text that is going to be displayed after the image of the VI Panel.
+</BODY>
+</HTML>
