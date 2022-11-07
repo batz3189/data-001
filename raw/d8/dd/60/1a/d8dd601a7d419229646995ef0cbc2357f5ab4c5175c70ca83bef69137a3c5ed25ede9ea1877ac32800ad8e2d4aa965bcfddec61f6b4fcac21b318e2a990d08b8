@@ -1,0 +1,17 @@
+MDK3.11 license 不能用的解决方法
+hiwool 发表于: 2007-8-05 12:32 来源: IC开发网 
+
+1. 先安装 MDK3.05
+2. 把 UV3目录中的UV3.dll拷贝出来，把ARM\BIN目录中ARM.dll拷贝出来
+3. 安装MDK3.11
+4. 把刚刚拷贝出来的3.05版的UV3.dll 复盖UV3目录中的3.11版的UV3.dll，把3.05版ARM.dll 复盖ARM\bin,AMR\bin31 目录中的3.11版的ARM.dll
+5. 用Keil_lic-3.4生成 license。注意一定要选择 Realview MDK。
+这样做出来的license 就不会再出现不能调试的问题。想用RDI调试可用如解决：
+把ARM\BIN目录中AgdiRDI.dll更改成UL2CM3.dll
+把tool.ini相应项改为：
+;TDRV1=BIN\UL2CM3.DLL("ULINK Cortex Debugger")
+TDRV1=BIN\UL2CM3.DLL("RDI Interface Driver")
+即可用RDI调试了。
+当然这样改了后就不能用ULink2调试 Cortex内核的芯片了，如果用JLink就没有问题了。
+
+解决MDK3.11不能用 U-Link1的问题，前面已有贴子说明，就是把3.05的UL2ARM.Dll复盖3.11的就可
