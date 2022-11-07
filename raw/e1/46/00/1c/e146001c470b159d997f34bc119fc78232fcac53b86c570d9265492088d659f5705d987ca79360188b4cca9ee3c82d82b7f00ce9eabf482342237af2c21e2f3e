@@ -1,0 +1,21 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+void
+main(int argc,char *argv[])
+/* int	argc;
+char 	*argv[]; */
+{
+	extern void ga(char *);
+
+	if (argc!=2)
+	{
+		printf("usage: ga  [datFile]\n");
+		exit(1);
+	}
+
+	ga(argv[1]);
+}
+
+
+
